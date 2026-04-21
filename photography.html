@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography — Hemanth Kapa</title>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'EB Garamond', serif;
+            margin: 40px;
+            padding: 0;
+            color: #1a1a1a;
+            letter-spacing: 0.01em;
+            line-height: 1.6;
+        }
+        a {
+            color: #1a1a1a;
+        }
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+        .gallery {
+            columns: 2;
+            column-gap: 1.2rem;
+        }
+        @media (max-width: 600px) {
+            .gallery { columns: 1; }
+        }
+        .gallery figure {
+            margin: 0 0 1.2rem 0;
+            break-inside: avoid;
+            cursor: pointer;
+        }
+        .gallery img {
+            width: 100%;
+            display: block;
+        }
+        .gallery figcaption {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.4rem;
+            font-style: italic;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .lightbox img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+        .lightbox .caption {
+            color: #ccc;
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-top: 0.8rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <a href="./">← Home</a>
+    <h1>Photography</h1>
+    <div class="gallery">
+        <figure onclick="openLightbox(this)">
+            <img src="assets/A spring day.JPG" alt="A Spring Day">
+            <figcaption>A Spring Day</figcaption>
+        </figure>
+        <figure onclick="openLightbox(this)">
+            <img src="assets/Into the Dark.JPG" alt="Into the Dark">
+            <figcaption>Into the Dark</figcaption>
+        </figure>
+        <figure onclick="openLightbox(this)">
+            <img src="assets/The Man.jpeg" alt="The Man">
+            <figcaption>The Man</figcaption>
+        </figure>
+        <figure onclick="openLightbox(this)">
+            <img src="assets/Triqutra.jpeg" alt="Triqutra">
+            <figcaption>Triqutra</figcaption>
+        </figure>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+            <div class="caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script>
+        function openLightbox(figure) {
+            var img = figure.querySelector('img');
+            var caption = figure.querySelector('figcaption');
+            document.getElementById('lightbox-img').src = img.src;
+            document.getElementById('lightbox-caption').textContent = caption.textContent;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html>
