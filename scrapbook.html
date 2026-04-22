@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrapbook — Hemanth Kapa</title>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'EB Garamond', serif;
+            margin: 40px;
+            padding: 0;
+            color: #1a1a1a;
+            letter-spacing: 0.01em;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a {
+            color: #1a1a1a;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        .declutter-btn {
+            font-family: 'EB Garamond', serif;
+            font-size: 0.95rem;
+            padding: 6px 14px;
+            border: 1px solid #1a1a1a;
+            background: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .declutter-btn:hover {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .board {
+            position: relative;
+            min-height: 80vh;
+        }
+
+        .item {
+            position: absolute;
+            transition: all 0.6s ease;
+            cursor: grab;
+        }
+        .item.dragging {
+            cursor: grabbing;
+            z-index: 50;
+            transition: none;
+        }
+        .item img {
+            max-width: 100%;
+            display: block;
+        }
+        .item .caption {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 0.3rem;
+        }
+        .item.note {
+            max-width: 280px;
+            padding: 1rem;
+            background: #fffde7;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+        .item.note p {
+            margin: 0;
+            font-size: 1rem;
+        }
+        .item.photo {
+            max-width: 260px;
+            background: #fff;
+            padding: 8px 8px 30px 8px;
+            box-shadow: 2px 3px 10px rgba(0,0,0,0.12);
+        }
+        .item.link-card {
+            max-width: 240px;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            background: #fafafa;
+        }
+        .item.link-card a {
+            color: #2a5db0;
+            font-size: 1rem;
+        }
+        .item.quote-card {
+            max-width: 300px;
+            padding: 1rem 1.2rem;
+            border-left: 3px solid #1a1a1a;
+            background: #f9f9f6;
+        }
+        .item.quote-card p {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        /* Tidy grid mode */
+        body.tidy .board {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        body.tidy .item {
+            position: static !important;
+            transform: rotate(0deg) !important;
+        }
+        body.tidy .item.photo,
+        body.tidy .item.note,
+        body.tidy .item.link-card,
+        body.tidy .item.quote-card {
+            max-width: 280px;
+        }
+    </style>
+</head>
+<body>
+    <a href="./">← Home</a>
+    <div class="top-bar">
+        <h1>Scrapbook</h1>
+        <button class="declutter-btn" onclick="toggleTidy()">Declutter</button>
+    </div>
+    <p style="font-style:italic; color:#666; margin-top:-0.5rem; margin-bottom:0.3rem;">All the things I find cool and interesting and want to come back to look at.</p>
+    <p style="font-size:0.95rem; color:#888; margin-bottom:2rem;">"Wherever you are, and whatever you do, be in love." — Rumi</p>
+
+    <div class="board" id="board">
+        <!-- Add items here: notes, photos, quotes, links -->
+        <!-- Examples below — replace with your own -->
+
+        <div class="item photo">
+            <img src="assets/chandamama.png" alt="Chandamama, June 1970">
+            <span class="caption">Chandamama, June 1970</span>
+        </div>
+
+        <div class="item link-card">
+            <a href="https://www.cosmos.so/e/1410695752" target="_blank">Cosmos collection</a>
+        </div>
+
+        <div class="item quote-card">
+            <p>In Persian culture, when someone calls you beautiful, a common reply is "it is your eyes that are beautiful" — meaning you must hone beauty in yourself to be able to recognize it in others. Everything is a mirror.</p>
+            <p style="margin-top:0.5rem; font-size:0.85rem;"><a href="https://x.com/sariverse/status/1793258001962254609" target="_blank">source</a></p>
+        </div>
+    </div>
+
+    <script>
+        function toggleTidy() {
+            document.body.classList.toggle('tidy');
+            var btn = document.querySelector('.declutter-btn');
+            btn.textContent = document.body.classList.contains('tidy') ? 'Clutter' : 'Declutter';
+        }
+
+        function scatter() {
+            var items = document.querySelectorAll('.board .item');
+            var board = document.getElementById('board');
+            var w = board.offsetWidth;
+
+            items.forEach(function(item) {
+                var maxX = w - 300;
+                var x = Math.random() * Math.max(maxX, 100);
+                var y = Math.random() * items.length * 120;
+                var rot = (Math.random() - 0.5) * 12;
+                item.style.left = x + 'px';
+                item.style.top = y + 'px';
+                item.style.transform = 'rotate(' + rot + 'deg)';
+            });
+
+            board.style.minHeight = (items.length * 160) + 'px';
+        }
+
+        scatter();
+        window.addEventListener('resize', function() {
+            if (!document.body.classList.contains('tidy')) scatter();
+        });
+
+        var dragItem = null;
+        var offsetX = 0;
+        var offsetY = 0;
+
+        document.querySelectorAll('.board .item').forEach(function(item) {
+            item.addEventListener('mousedown', startDrag);
+            item.addEventListener('touchstart', startDrag, {passive: false});
+        });
+
+        function startDrag(e) {
+            if (document.body.classList.contains('tidy')) return;
+            e.preventDefault();
+            dragItem = this;
+            dragItem.classList.add('dragging');
+            var rect = dragItem.getBoundingClientRect();
+            var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            offsetX = clientX - rect.left;
+            offsetY = clientY - rect.top;
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('mouseup', stopDrag);
+            document.addEventListener('touchmove', onDrag, {passive: false});
+            document.addEventListener('touchend', stopDrag);
+        }
+
+        function onDrag(e) {
+            if (!dragItem) return;
+            e.preventDefault();
+            var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            var board = document.getElementById('board');
+            var boardRect = board.getBoundingClientRect();
+            dragItem.style.left = (clientX - boardRect.left - offsetX + window.scrollX) + 'px';
+            dragItem.style.top = (clientY - boardRect.top - offsetY + window.scrollY) + 'px';
+        }
+
+        function stopDrag() {
+            if (dragItem) dragItem.classList.remove('dragging');
+            dragItem = null;
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchmove', onDrag);
+            document.removeEventListener('touchend', stopDrag);
+        }
+    </script>
+</body>
+</html>
